@@ -15,6 +15,18 @@ function initMap() {
 }
 
 
+function figureToHtml(figure) {
+    switch (figure) {
+        case 'K': return '&#9812'; case 'k': return "&#9818";
+        case 'Q': return "&#9813"; case 'q': return "&#9819";
+        case 'R': return "&#9814"; case 'r': return "&#9820";
+        case 'B': return "&#9815"; case 'b': return "&#9821";
+        case 'N': return "&#9816"; case 'n': return "&#9822";
+        case 'P': return "&#9817"; case 'p': return "&#9823";
+        default: return '&nbsp'
+    }
+}
+
 
 
 function showMap() {
@@ -24,9 +36,9 @@ function showMap() {
         html += '<tr>'
         for (let x = 0; x <= 7; x++) {
             color = (x + y) % 2 ? 'white' : 'lightgreen';
-            html += "<td style=text-align:center;height:50px;width:50px;background-color:" + color +
+            html += "<td style=font-size:40px;text-align:center;height:50px;width:50px;background-color:" + color +
                 ">";
-            html += map[x][y]
+            html += figureToHtml(map[x][y])
             html += "</td >"
         }
         html += '</tr>'
