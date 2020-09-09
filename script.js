@@ -1,4 +1,5 @@
 let map = Array();
+let inf = Array();
 
 function initMap() {
     map = [
@@ -14,6 +15,18 @@ function initMap() {
     ];
 }
 
+function initInf() {
+    inf = [
+        [" ", " ", " ", " ", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " ", " ", " ", " "]
+    ]
+};
 
 function figureToHtml(figure) {
     switch (figure) {
@@ -27,15 +40,16 @@ function figureToHtml(figure) {
     }
 }
 
-
-
 function showMap() {
     let html;
     html = "<table border='1' cellpadding='2' cellspacing='0'>"
     for (let y = 7; y >= 0; y--) {
         html += '<tr>'
         for (let x = 0; x <= 7; x++) {
-            color = (x + y) % 2 ? 'white' : 'lightgreen';
+            if (inf[x][y] == " ")
+                color = (x + y) % 2 ? 'white' : 'lightgreen';
+            else
+                color = inf[x][y] == "1" ? "#aaffaa" : "#abcdef"
             html += "<td style=font-size:40px;text-align:center;height:50px;width:50px;background-color:" + color +
                 ">";
             html += figureToHtml(map[x][y])
@@ -47,5 +61,6 @@ function showMap() {
 }
 
 initMap();
+initInf();
 showMap();
 
