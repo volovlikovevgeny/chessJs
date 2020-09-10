@@ -1,6 +1,8 @@
 let map = Array();
 let inf = Array();
 
+let moveColor = 'black';
+
 function initMap() {
     map = [
         //y0   y1  y2   y3   y4   y5    y6   y7
@@ -28,6 +30,31 @@ function initInf() {
     ]
 };
 
+
+function marksMoveFrom() {
+    initInf();
+    for (let x = 0; x <= 7; x++) {
+        for (let y = 0; y <= 7; y++) {
+            if (canMoveFrom(x, y)) {
+                inf[x][y] = 1;
+            }
+        }
+    }
+
+}
+
+function canMoveFrom(x, y) {
+    return getColor(x, y) == moveColor;
+}
+
+function getColor(x, y) {
+    let figure = map[x][y];
+    if (figure == " ")
+        return " ";
+    return (figure.toUpperCase() == figure) ? "white" : "black";
+}
+
+
 function figureToHtml(figure) {
     switch (figure) {
         case 'K': return '&#9812'; case 'k': return "&#9818";
@@ -40,6 +67,14 @@ function figureToHtml(figure) {
     }
 }
 
+
+
+function clickBox(x, y) {
+    alert(x + ", " + y)
+}
+
+
+
 function showMap() {
     let html;
     html = "<table border='1' cellpadding='2' cellspacing='0'>"
@@ -47,11 +82,12 @@ function showMap() {
         html += '<tr>'
         for (let x = 0; x <= 7; x++) {
             if (inf[x][y] == " ")
-                color = (x + y) % 2 ? 'white' : 'lightgreen';
+                color = (x + y) % 2 ? 'white' : 'lightblue';
             else
                 color = inf[x][y] == "1" ? "#aaffaa" : "#abcdef"
-            html += "<td style=font-size:40px;text-align:center;height:50px;width:50px;background-color:" + color +
-                ">";
+            html += "<td style='width:50px;height:50px;text-align:center;font-size:40px;cursor:grab;background:"
+                + color + ";" +
+                "' onclick = clickBox(" + x + "," + y + ") >"
             html += figureToHtml(map[x][y])
             html += "</td >"
         }
@@ -61,6 +97,6 @@ function showMap() {
 }
 
 initMap();
-initInf();
+marksMoveFrom();
 showMap();
 
