@@ -139,7 +139,7 @@ function showMap() {
                 color = (x + y) % 2 ? 'white' : 'lightblue';
             else
                 color = inf[x][y] == "1" ? "#aaffaa" : "#00F260"
-            html += "<td style='width:3.500rem;height:3.500rem;text-align:center;font-size:2rem;cursor:grab;background:"
+            html += "<td style='width:4rem;height:4rem;text-align:center;font-size:1.7rem;cursor:grab;background:"
                 + color + ";" +
                 "' onclick = clickBox(" + x + "," + y + ") >"
             html += figureToHtml(map[x][y])
