@@ -1,7 +1,12 @@
 let map = Array();
 let inf = Array();
 
-let moveColor = 'black';
+let moveColor = 'white';
+
+let moveFromX
+
+let moveFromY
+
 
 function initMap() {
     map = [
@@ -70,10 +75,51 @@ function figureToHtml(figure) {
 
 
 function clickBox(x, y) {
-    alert(x + ", " + y)
+    if (inf[x][y] == '1') {
+        clickBoxFrom(x, y);
+    }
+    if (inf[x][y] == '2') {
+        clickBoxTo(x, y);
+    }
+}
+
+function clickBoxFrom(x, y) {
+    moveFromX = x;
+    moveFromY = y;
+    markMoveTo();
+    showMap();
+}
+
+function markMoveTo() {
+    initInf();
+    for (let x = 0; x <= 7; x++) {
+        for (let y = 0; y <= 7; y++) {
+            if (canMoveTo(x, y)) {
+                inf[x][y] = 2;
+            }
+        }
+    }
 }
 
 
+function canMoveTo(x, y) {
+    if (map[x][y] == " ")
+        return true;
+    return getColor(x, y) != moveColor //white can eat black &&
+
+}
+
+function clickBoxTo(x, y) {
+    map[x][y] = map[moveFromX][moveFromY] // записать координаты той фигуры которую мы предварительно сохранили в перменной
+    map[moveFromX][moveFromY] = " ";
+    turnMove();
+    marksMoveFrom();
+    showMap();
+}
+
+function turnMove() {
+    moveColor = moveColor == 'white' ? 'black' : 'white';
+}
 
 function showMap() {
     let html;
@@ -84,7 +130,7 @@ function showMap() {
             if (inf[x][y] == " ")
                 color = (x + y) % 2 ? 'white' : 'lightblue';
             else
-                color = inf[x][y] == "1" ? "#aaffaa" : "#abcdef"
+                color = inf[x][y] == "1" ? "#aaffaa" : "#00F260"
             html += "<td style='width:50px;height:50px;text-align:center;font-size:40px;cursor:grab;background:"
                 + color + ";" +
                 "' onclick = clickBox(" + x + "," + y + ") >"
