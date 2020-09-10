@@ -1,3 +1,12 @@
+const table = document.getElementsByClassName('game-table')[0];
+const startGameBtn = document.getElementsByClassName('start-game')[0];
+
+startGameBtn.addEventListener('click', function () {
+    table.style.display = 'none';
+    startGame();
+})
+
+
 let map = Array();
 let inf = Array();
 
@@ -141,7 +150,10 @@ function showMap() {
     document.getElementById('board').innerHTML = html;
 }
 
-initMap();
-marksMoveFrom();
-showMap();
+function startGame() {
+    initMap();
+    marksMoveFrom();
+    showMap();
+}
+
 

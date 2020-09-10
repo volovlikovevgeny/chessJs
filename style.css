@@ -14,3 +14,50 @@ body{
 *{
     box-sizing: border-box;
 }
+
+
+#board{
+    position: relative;
+}
+
+.game-table{
+    position: absolute;
+    top: 30%;
+    width: 350px;
+    height: 200px;
+    background: #ff6e7f;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to right, #bfe9ff, #ff6e7f);  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to right, #bfe9ff, #ff6e7f); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.table-inner{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.chess-game{
+    margin: 10px;
+    font-size: 2rem;
+    padding: 5px;
+}
+
+.start-game{
+    margin: 10px;
+    padding:10px 30px;
+    border: none; 
+    background: #C6FFDD;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #f7797d, #FBD786, #C6FFDD);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #f7797d, #FBD786, #C6FFDD); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    border-radius: 5%;
+}
+
+@media(max-width:415px){
+body{
+    margin: 0 0;
+}
+}
