@@ -7,7 +7,6 @@ let moveFromX
 
 let moveFromY
 
-
 function initMap() {
     map = [
         //y0   y1  y2   y3   y4   y5    y6   y7
@@ -131,7 +130,7 @@ function showMap() {
                 color = (x + y) % 2 ? 'white' : 'lightblue';
             else
                 color = inf[x][y] == "1" ? "#aaffaa" : "#00F260"
-            html += "<td style='width:50px;height:50px;text-align:center;font-size:40px;cursor:grab;background:"
+            html += "<td style='width:3.125rem;height:3.125rem;text-align:center;font-size:40px;cursor:grab;background:"
                 + color + ";" +
                 "' onclick = clickBox(" + x + "," + y + ") >"
             html += figureToHtml(map[x][y])
