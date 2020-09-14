@@ -1,10 +1,4 @@
-const table = document.getElementsByClassName('game-table')[0];
-const startGameBtn = document.getElementsByClassName('start-game')[0];
 
-startGameBtn.addEventListener('click', function () {
-    table.style.display = 'none';
-    startGame();
-})
 
 let map = Array();
 let inf = Array();
@@ -42,12 +36,44 @@ function initInf() {
     ]
 };
 
+
+// function canMove(sx, sy, dx, dy) {
+//     if (!canMoveFrom) {
+//         return false;
+//     }
+//     if (!canMoveTo) {
+//         return false;
+//     }
+//     if (!isCorrectMove) {
+//         return false;
+//     }
+//     return true;
+// }
+
+
+
+function isCorrectMove(sx, sy, dx, dy) {
+
+}
+
+
 function marksMoveFrom() {
     initInf();
     for (let x = 0; x <= 7; x++) {
         for (let y = 0; y <= 7; y++) {
             if (canMoveFrom(x, y)) {
                 inf[x][y] = 1;
+            }
+        }
+    }
+}
+
+function markMoveTo() {
+    initInf();
+    for (let x = 0; x <= 7; x++) {
+        for (let y = 0; y <= 7; y++) {
+            if (canMoveTo(x, y)) {
+                inf[x][y] = 2;
             }
         }
     }
@@ -100,16 +126,6 @@ function clickBoxTo(x, y) {
     showMap();
 }
 
-function markMoveTo() {
-    initInf();
-    for (let x = 0; x <= 7; x++) {
-        for (let y = 0; y <= 7; y++) {
-            if (canMoveTo(x, y)) {
-                inf[x][y] = 2;
-            }
-        }
-    }
-}
 
 function canMoveTo(x, y) {
     if (map[x][y] == " ")
@@ -140,6 +156,7 @@ function showMap() {
         html += '</tr>'
     }
     document.getElementById('board').innerHTML = html;
+
 }
 
 function startGame() {
@@ -147,5 +164,6 @@ function startGame() {
     marksMoveFrom();
     showMap();
 }
+startGame();
 
 
