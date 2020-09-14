@@ -6,15 +6,14 @@ startGameBtn.addEventListener('click', function () {
     startGame();
 })
 
-
 let map = Array();
 let inf = Array();
 
 let moveColor = 'white';
 
-let moveFromX
+let moveFromX;
 
-let moveFromY
+let moveFromY;
 
 function initMap() {
     map = [
@@ -43,7 +42,6 @@ function initInf() {
     ]
 };
 
-
 function marksMoveFrom() {
     initInf();
     for (let x = 0; x <= 7; x++) {
@@ -53,7 +51,6 @@ function marksMoveFrom() {
             }
         }
     }
-
 }
 
 function canMoveFrom(x, y) {
@@ -67,7 +64,6 @@ function getColor(x, y) {
     return (figure.toUpperCase() == figure) ? "white" : "black";
 }
 
-
 function figureToHtml(figure) {
     switch (figure) {
         case 'K': return '&#9812'; case 'k': return "&#9818";
@@ -79,8 +75,6 @@ function figureToHtml(figure) {
         default: return '&nbsp'
     }
 }
-
-
 
 function clickBox(x, y) {
     if (inf[x][y] == '1') {
@@ -98,6 +92,14 @@ function clickBoxFrom(x, y) {
     showMap();
 }
 
+function clickBoxTo(x, y) {
+    map[x][y] = map[moveFromX][moveFromY] // записать координаты той фигуры которую мы предварительно сохранили в перменной
+    map[moveFromX][moveFromY] = " ";
+    turnMove();
+    marksMoveFrom();
+    showMap();
+}
+
 function markMoveTo() {
     initInf();
     for (let x = 0; x <= 7; x++) {
@@ -109,20 +111,10 @@ function markMoveTo() {
     }
 }
 
-
 function canMoveTo(x, y) {
     if (map[x][y] == " ")
         return true;
     return getColor(x, y) != moveColor //white can eat black &&
-
-}
-
-function clickBoxTo(x, y) {
-    map[x][y] = map[moveFromX][moveFromY] // записать координаты той фигуры которую мы предварительно сохранили в перменной
-    map[moveFromX][moveFromY] = " ";
-    turnMove();
-    marksMoveFrom();
-    showMap();
 }
 
 function turnMove() {
