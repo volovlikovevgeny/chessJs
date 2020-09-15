@@ -107,7 +107,6 @@ function isCorrectKnightMove(sx, sy, dx, dy) {
     return false;
 }
 
-
 function isCorrectRookMove(sx, sy, dx, dy) {
     let deltaX = 0;
     let deltaY = 0
@@ -125,6 +124,23 @@ function isCorrectRookMove(sx, sy, dx, dy) {
     }
     if (Math.abs(deltaX) + Math.abs(deltaY) != 1) {
         return false;
+    }
+
+
+    do {
+        sx += deltaX;
+        sy += deltaY;
+
+        if (sx == dx & sy == dy) {
+            return true;
+        }
+        if (map[sx][sy] != " ") {
+            return false;
+        }
+    } while (onMap(sx, sy))
+
+    function onMap(x, y) {
+        return (x >= 0 && x <= 7 && y >= 0 && y <= 7)
     }
 
 
