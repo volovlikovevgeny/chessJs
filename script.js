@@ -37,32 +37,113 @@ function initInf() {
 };
 
 
-// function canMove(sx, sy, dx, dy) {
-//     if (!canMoveFrom) {
-//         return false;
-//     }
-//     if (!canMoveTo) {
-//         return false;
-//     }
-//     if (!isCorrectMove) {
-//         return false;
-//     }
-//     return true;
-// }
-
+function canMove(sx, sy, dx, dy) {
+    if (!canMoveFrom(sx, sy)) {
+        return false;
+    }
+    if (!canMoveTo(dx, dy)) {
+        return false;
+    }
+    if (!isCorrectMove(sx, sy, dx, dy)) {
+        return false;
+    }
+    return true;
+}
 
 
 function isCorrectMove(sx, sy, dx, dy) {
+    let figure = map[sx][sy];
+
+    if (isKing(figure)) {
+        return isCorrectKingMove(sx, sy, dx, dy)
+    }
+    if (isQueen(figure)) {
+        return isCorrectQueenMove(sx, sy, dx, dy)
+    }
+    if (isBishop(figure)) {
+        return isCorrectBishopMove(sx, sy, dx, dy)
+    }
+    if (isKnight(figure)) {
+        return isCorrectKnightMove(sx, sy, dx, dy)
+    }
+    if (isRook(figure)) {
+        return isCorrectRookMove(sx, sy, dx, dy)
+    }
+    if (isPawn(figure)) {
+        return isCorrectPawnMove(sx, sy, dx, dy)
+    }
+
+    return true;
+}
+
+function isKing(figure) { return figure.toUpperCase() == 'K' }
+function isQueen(figure) { return figure.toUpperCase() == 'Q' }
+function isBishop(figure) { return figure.toUpperCase() == 'B' }
+function isKnight(figure) { return figure.toUpperCase() == 'N' }
+function isRook(figure) { return figure.toUpperCase() == 'R' }
+function isPawn(figure) { return figure.toUpperCase() == 'P' }
+
+
+function isCorrectKingMove(sx, sy, dx, dy) {
+    if (Math.abs(dx - sx) <= 1 && Math.abs(dy - sy) <= 1) {
+
+        return true;
+    }
 
 }
+function isCorrectQueenMove(sx, sy, dx, dy) {
+    return true;
+}
+function isCorrectBishopMove(sx, sy, dx, dy) {
+    return true;
+}
+function isCorrectKnightMove(sx, sy, dx, dy) {
+    if (Math.abs(dx - sx) == 1 & Math.abs(dy - sy) == 2) {
+        return true;
+    }
+    if (Math.abs(dx - sx) == 2 & Math.abs(dy - sy) == 1) {
+        return true
+    }
+    return false;
+}
+
+
+function isCorrectRookMove(sx, sy, dx, dy) {
+    let deltaX = 0;
+    let deltaY = 0
+    if (dx > sx) {
+        deltaX += 1;
+    }
+    if (dx < sx) {
+        deltaX -= 1;
+    }
+    if (dy > sy) {
+        deltaY += 1;
+    }
+    if (dy < sy) {
+        deltaY -= 1;
+    }
+    if (Math.abs(deltaX) + Math.abs(deltaY) != 1) {
+        return false;
+    }
+
+
+    return true;
+}
+
+function isCorrectPawnMove(sx, sy, dx, dy) { return true; }
 
 
 function marksMoveFrom() {
     initInf();
-    for (let x = 0; x <= 7; x++) {
-        for (let y = 0; y <= 7; y++) {
-            if (canMoveFrom(x, y)) {
-                inf[x][y] = 1;
+    for (let sx = 0; sx <= 7; sx++) {
+        for (let sy = 0; sy <= 7; sy++) {
+            for (let dx = 0; dx <= 7; dx++) {
+                for (let dy = 0; dy <= 7; dy++) {
+                    if (canMove(sx, sy, dx, dy)) {
+                        inf[sx][sy] = 1;
+                    }
+                }
             }
         }
     }
@@ -72,12 +153,13 @@ function markMoveTo() {
     initInf();
     for (let x = 0; x <= 7; x++) {
         for (let y = 0; y <= 7; y++) {
-            if (canMoveTo(x, y)) {
+            if (canMove(moveFromX, moveFromY, x, y)) {
                 inf[x][y] = 2;
             }
         }
     }
 }
+
 
 function canMoveFrom(x, y) {
     return getColor(x, y) == moveColor;
@@ -156,7 +238,6 @@ function showMap() {
         html += '</tr>'
     }
     document.getElementById('board').innerHTML = html;
-
 }
 
 function startGame() {
