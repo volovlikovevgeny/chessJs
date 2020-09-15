@@ -1,3 +1,9 @@
+let modal = document.getElementsByClassName('modal')[0]
+let modalButton = document.getElementsByTagName('button')[0];
+modalButton.addEventListener('click', function () {
+    modal.style.display = 'none';
+    startGame();
+})
 
 
 let map = Array();
@@ -8,6 +14,9 @@ let moveColor = 'white';
 let moveFromX;
 
 let moveFromY;
+
+
+
 
 function initMap() {
     map = [
@@ -281,6 +290,6 @@ function startGame() {
     marksMoveFrom();
     showMap();
 }
-startGame();
+
 
 
