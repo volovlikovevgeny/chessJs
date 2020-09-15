@@ -6,6 +6,14 @@ modalButton.addEventListener('click', function () {
 })
 
 
+modal.addEventListener('click', function (e) {
+    if (e.target.classList.contains('playBtn')) {
+        modal.style.display = 'none';
+        startGame();
+    }
+
+})
+
 let map = Array();
 let inf = Array();
 
