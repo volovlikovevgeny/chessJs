@@ -1,5 +1,6 @@
 let modal = document.getElementsByClassName('modal')[0]
 let modalButton = document.getElementsByTagName('button')[0];
+
 modalButton.addEventListener('click', function () {
     modal.style.display = 'none';
     startGame();
@@ -22,8 +23,6 @@ let moveColor = 'white';
 let moveFromX;
 
 let moveFromY;
-
-
 
 
 function initMap() {
@@ -60,10 +59,7 @@ function canMove(sx, sy, dx, dy) {
     if (!canMoveTo(dx, dy)) {
         return false;
     }
-    if (!isCorrectMove(sx, sy, dx, dy)) {
-        return false;
-    }
-    return true;
+    return isCorrectMove(sx, sy, dx, dy);
 }
 
 function isCorrectMove(sx, sy, dx, dy) {
@@ -98,6 +94,55 @@ function isRook(figure) { return figure.toUpperCase() == 'R' }
 function isPawn(figure) { return figure.toUpperCase() == 'P' }
 
 
+
+function isCorrectLineMove(sx, sy, dx, dy, figure) {
+
+    let deltaX = Math.sign(dx - sx);
+    let deltaY = Math.sign(dy - sy);
+
+    if (!isCorrectLineDelta(deltaX, deltaY, figure)) {
+        return false;
+    }
+
+    do {
+        sx += deltaX;
+        sy += deltaY;
+
+        if (sx == dx && sy == dy) {
+            return true;
+        }
+    } while (isEmpty(sx, sy)) {
+        return false;
+    }
+}
+
+
+function isCorrectLineDelta(deltaX, deltaY, figure) {
+
+    if (isRook(figure)) {
+        return isCorrectRookDelta(deltaX, deltaY);
+    }
+    if (isBishop(figure)) {
+        return isCorrectBishopDelta(deltaX, deltaY);
+    }
+    if (isQueen(figure)) {
+        return isCorrectQueenDelta(deltaX, deltaY);
+    }
+    return false;
+}
+
+function isCorrectRookDelta(deltaX, deltaY) {
+    return Math.abs(deltaX) + Math.abs(deltaY) == 1
+}
+
+function isCorrectBishopDelta(deltaX, deltaY) {
+    return Math.abs(deltaX) + Math.abs(deltaY) == 2
+}
+
+function isCorrectQueenDelta(deltaX, deltaY) {
+    return true;
+}
+
 function isCorrectKingMove(sx, sy, dx, dy) {
     if (Math.abs(dx - sx) <= 1 && Math.abs(dy - sy) <= 1) {
 
@@ -106,38 +151,11 @@ function isCorrectKingMove(sx, sy, dx, dy) {
 }
 
 function isCorrectQueenMove(sx, sy, dx, dy,) {
-    let deltaX = Math.sign(dx - sx);
-    let deltaY = Math.sign(dy - sy);
-
-    do {
-        sx += deltaX;
-        sy += deltaY;
-
-        if (sx == dx && sy == dy) {
-            return true;
-        }
-    } while (isEmpty(sx, sy)) {
-        return false;
-    }
+    return isCorrectLineMove(sx, sy, dx, dy, "Q")
 }
 
 function isCorrectBishopMove(sx, sy, dx, dy) {
-    let deltaX = Math.sign(dx - sx);
-    let deltaY = Math.sign(dy - sy);
-
-    if (Math.abs(deltaX) + Math.abs(deltaY) != 2) {
-        return false;
-    }
-    do {
-        sx += deltaX;
-        sy += deltaY;
-
-        if (sx == dx && sy == dy) {
-            return true;
-        }
-    } while (isEmpty(sx, sy)) {
-        return false;
-    }
+    return isCorrectLineMove(sx, sy, dx, dy, "B")
 }
 
 function isCorrectKnightMove(sx, sy, dx, dy) {
@@ -151,22 +169,7 @@ function isCorrectKnightMove(sx, sy, dx, dy) {
 }
 
 function isCorrectRookMove(sx, sy, dx, dy) {
-    let deltaX = Math.sign(dx - sx);
-    let deltaY = Math.sign(dy - sy);
-
-    if (Math.abs(deltaX) + Math.abs(deltaY) != 1) {
-        return false;
-    }
-    do {
-        sx += deltaX;
-        sy += deltaY;
-
-        if (sx == dx && sy == dy) {
-            return true;
-        }
-    } while (isEmpty(sx, sy)) {
-        return false;
-    }
+    return isCorrectLineMove(sx, sy, dx, dy, "R")
 }
 
 function isEmpty(x, y) {
@@ -180,7 +183,48 @@ function onMap(x, y) {
     return (x >= 0 && x <= 7 && y >= 0 && y <= 7)
 }
 
-function isCorrectPawnMove(sx, sy, dx, dy) { return true; }
+function isCorrectPawnMove(sx, sy, dx, dy) {
+    if (getColor(sx, sy) == 'white') {
+        return isCorrectWhitePawnMove(sx, sy, dx, dy)
+    }
+    if (getColor(sx, sy) == 'black') {
+        return isCorrectBlackPawnMove(sx, sy, dx, dy)
+    }
+    return false;
+}
+
+
+function isCorrectWhitePawnMove(sx, sy, dx, dy) {
+    if (sy < 1 || sy > 6) {
+        return false
+    };
+    if (isPawnPassant()) {
+        return true;
+    }
+    if (!isEmpty(dx, dy)) {  //Взятие?
+        if (Math.abs(dx - sx) != 1) //шаг влево вправо 
+            return false;
+        return dy - sy == 1;
+    }
+    if (dx != sx)
+        return false;
+    if (dy - sy == 1)
+        return true;
+    if (dy - sy == 2) {
+        if (sy != 1)
+            return false;
+        return isEmpty(sx, sy + 1)
+    } //на 2 клетки
+    return false;
+}
+
+function isPawnPassant() {
+    return false;
+}
+
+function isCorrectBlackPawnMove(sx, sy, dx, dy) {
+    return true;
+}
 
 function marksMoveFrom() {
     initInf();
