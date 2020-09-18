@@ -23,6 +23,9 @@ let moveColor = 'white';
 let moveFromX;
 
 let moveFromY;
+let pawnAttackX = 1;
+let pawnAttackY = 5;
+
 
 
 function initMap() {
@@ -198,7 +201,7 @@ function isCorrectWhitePawnMove(sx, sy, dx, dy) {
     if (sy < 1 || sy > 6) {
         return false
     };
-    if (isPawnPassant()) {
+    if (isPawnPassant(sx, sy, dx, dy)) {
         return true;
     }
     if (!isEmpty(dx, dy)) {  //Взятие?
@@ -218,11 +221,21 @@ function isCorrectWhitePawnMove(sx, sy, dx, dy) {
     return false;
 }
 
-function isPawnPassant() {
-    return false;
+function isPawnPassant(sx, sy, dx, dy) {
+    if (!(dx == pawnAttackX && dy == pawnAttackY)) {
+        return false;
+    }
+    if (sy != 4) {
+        return false;
+    }
+    if (dy - sy != 1) {
+        return false;
+    }
+    return (Math.abs(dx - sx) == 1)
+
 }
 
-function isCorrectBlackPawnMove(sx, sy, dx, dy) {
+function isCorrectBlackPawnMove() {
     return true;
 }
 
@@ -342,6 +355,3 @@ function startGame() {
     marksMoveFrom();
     showMap();
 }
-
-
-
