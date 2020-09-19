@@ -23,8 +23,8 @@ let moveColor = 'white';
 let moveFromX;
 
 let moveFromY;
-let pawnAttackX = 1;
-let pawnAttackY = 5;
+let pawnAttackX;
+let pawnAttackY;
 
 
 
@@ -187,57 +187,59 @@ function onMap(x, y) {
 }
 
 function isCorrectPawnMove(sx, sy, dx, dy) {
+    if (sy < 1 || sy > 6) {
+        return false
+    };
     if (getColor(sx, sy) == 'white') {
-        return isCorrectWhitePawnMove(sx, sy, dx, dy)
+        return isCorrectSignPawnMove(sx, sy, dx, dy, 1)
     }
     if (getColor(sx, sy) == 'black') {
-        return isCorrectBlackPawnMove(sx, sy, dx, dy)
+        return isCorrectSignPawnMove(sx, sy, dx, dy, -1)
     }
     return false;
 }
 
 
-function isCorrectWhitePawnMove(sx, sy, dx, dy) {
-    if (sy < 1 || sy > 6) {
-        return false
-    };
-    if (isPawnPassant(sx, sy, dx, dy)) {
+function isCorrectSignPawnMove(sx, sy, dx, dy, sign) {
+    if (isPawnPassant(sx, sy, dx, dy, sign)) {
         return true;
     }
     if (!isEmpty(dx, dy)) {  //Взятие?
         if (Math.abs(dx - sx) != 1) //шаг влево вправо 
             return false;
-        return dy - sy == 1;
+        return dy - sy == sign;
     }
     if (dx != sx)
         return false;
-    if (dy - sy == 1)
+    if (dy - sy == sign)
         return true;
-    if (dy - sy == 2) {
-        if (sy != 1)
+    if (dy - sy == sign * 2) {
+        if (sy != 1 && sy != 6)
             return false;
-        return isEmpty(sx, sy + 1)
+        return isEmpty(sx, sy + sign)
     } //на 2 клетки
     return false;
 }
 
-function isPawnPassant(sx, sy, dx, dy) {
+
+
+function isPawnPassant(sx, sy, dx, dy, sign) {
     if (!(dx == pawnAttackX && dy == pawnAttackY)) {
         return false;
     }
-    if (sy != 4) {
+    if (sign == +1 && sy != 4) {
         return false;
     }
-    if (dy - sy != 1) {
+    if (sign == -1 && sy != 3) {
+        return false;
+    }
+    if (dy - sy != sign) {
         return false;
     }
     return (Math.abs(dx - sx) == 1)
 
 }
 
-function isCorrectBlackPawnMove() {
-    return true;
-}
 
 function marksMoveFrom() {
     initInf();
@@ -307,12 +309,35 @@ function clickBoxFrom(x, y) {
     showMap();
 }
 
-function clickBoxTo(x, y) {
-    map[x][y] = map[moveFromX][moveFromY] // записать координаты той фигуры которую мы предварительно сохранили в перменной
+function clickBoxTo(toX, toY) {
+
+    fromFigure = map[moveFromX][moveFromY];
+    toFigure = map[toX, toY];
+
+
+    map[toX][toY] = fromFigure // записать координаты той фигуры которую мы предварительно сохранили в перменной
     map[moveFromX][moveFromY] = " ";
+
+    if (isPawn(fromFigure))
+        if (toX == pawnAttackX && toY == pawnAttackY)
+            map[toX][toY - 1] = " ";
+
+
+    checkPawnAttack(fromFigure, toX, toY);
+
     turnMove();
     marksMoveFrom();
     showMap();
+}
+
+function checkPawnAttack(fromFigure, toX, toY) {
+    pawnAttackX = -1;
+    pawnAttackY = -1;
+    if (isPawn(fromFigure))
+        if (Math.abs(toY - moveFromX)) {
+            pawnAttackX = moveFromX;
+            pawnAttackY = (moveFromY + toY) / 2;
+        }
 }
 
 
