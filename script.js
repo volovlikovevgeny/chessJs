@@ -39,7 +39,7 @@ function initMap() {
         ["B", "P", " ", " ", " ", " ", "p", "b"],//x=5
         ["N", "P", " ", " ", " ", " ", "p", "n"],//x=6
         ["R", "P", " ", " ", " ", " ", "p", "r"] //x=7
-    ];
+    ]
 }
 
 function initInf() {
@@ -314,13 +314,11 @@ function clickBoxTo(toX, toY) {
     fromFigure = map[moveFromX][moveFromY];
     toFigure = map[toX, toY];
 
+    pawnFigure = promotePawn(fromFigure, toY);
 
-    map[toX][toY] = fromFigure // записать координаты той фигуры которую мы предварительно сохранили в перменной
+
+    map[toX][toY] = pawnFigure == " " ? fromFigure : pawnFigure // записать координаты той фигуры которую мы предварительно сохранили в перменной
     map[moveFromX][moveFromY] = " ";
-
-    if (isPawn(fromFigure))
-        if (toX == pawnAttackX && toY == pawnAttackY)
-            map[toX][toY - 1] = " ";
 
 
     checkPawnAttack(fromFigure, toX, toY);
@@ -330,7 +328,38 @@ function clickBoxTo(toX, toY) {
     showMap();
 }
 
+function promotePawn(fromFigure, toY) {
+    if (!isPawn(fromFigure))
+        return " ";
+    if (!(toY == 7 || toY == 0))
+        return " ";
+
+    do {
+        figure = prompt("Select figure to prompt: Q R B N", "Q");
+    } while (!(
+        isQueen(figure) ||
+        isRook(figure) ||
+        isBishop(figure) ||
+        isKnight(figure))) {
+
+        if (moveColor == "white")
+            fromFigure = figure.toUpperCase();
+        else
+            fromFigure = figure.toLowerCase();
+        return fromFigure;
+    }
+}
+
 function checkPawnAttack(fromFigure, toX, toY) {
+
+    if (isPawn(fromFigure))
+        if (toX == pawnAttackX && toY == pawnAttackY);
+    if (moveColor == 'white') {
+        map[toX][toY - 1] = " ";
+    } else {
+        map[toX][toY + 1] = " ";
+    }
+
     pawnAttackX = -1;
     pawnAttackY = -1;
     if (isPawn(fromFigure))
