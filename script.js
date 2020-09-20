@@ -1,3 +1,5 @@
+//26
+
 let modal = document.getElementsByClassName('modal')[0]
 let modalButton = document.getElementsByTagName('button')[0];
 
@@ -25,20 +27,22 @@ let moveFromX;
 let moveFromY;
 let pawnAttackX;
 let pawnAttackY;
+var moveFigure;
+let toFigure;
 
 
 
 function initMap() {
     map = [
         //y0   y1  y2   y3   y4   y5    y6   y7
-        ["R", "P", " ", " ", " ", " ", "p", "r"],//x=0
-        ["N", "P", " ", " ", " ", " ", "p", "n"],//x=1
-        ["B", "P", " ", " ", " ", " ", "p", "b"],//x=2
-        ["Q", "P", " ", " ", " ", " ", "p", "q"],//x=3
-        ["K", "P", " ", " ", " ", " ", "p", "k"],//x=4
-        ["B", "P", " ", " ", " ", " ", "p", "b"],//x=5
-        ["N", "P", " ", " ", " ", " ", "p", "n"],//x=6
-        ["R", "P", " ", " ", " ", " ", "p", "r"] //x=7
+        ["R", " ", " ", " ", " ", " ", " ", "r"],//x=0
+        ["N", " ", " ", " ", " ", " ", " ", "n"],//x=1
+        ["B", " ", " ", " ", " ", " ", " ", "b"],//x=2
+        ["Q", " ", " ", " ", " ", " ", " ", "q"],//x=3
+        ["K", " ", " ", " ", " ", " ", " ", "k"],//x=4
+        ["B", " ", " ", " ", " ", " ", " ", "b"],//x=5
+        ["N", " ", " ", " ", " ", " ", " ", "n"],//x=6
+        ["R", " ", " ", " ", " ", " ", " ", "r"] //x=7
     ]
 }
 
@@ -62,7 +66,32 @@ function canMove(sx, sy, dx, dy) {
     if (!canMoveTo(dx, dy)) {
         return false;
     }
-    return isCorrectMove(sx, sy, dx, dy);
+    if (!isCorrectMove(sx, sy, dx, dy)) {
+        return false;
+    }
+    if (!isCheck(sx, sy, dx, dy)) {
+        return true;
+    }
+    return false;
+}
+
+
+function isCheck(sx, sy, dx, dy) {
+    moveFigure(sx, sy, dx, dy);
+
+    king = findFigure("K");
+    map[king.x][king.y] = "P";
+
+    backFigure(sx, sy, dx, dy);
+}
+
+
+function findFigure(figure) {
+    for (let x = 0; x < 7; x++)
+        for (let y = 0; y < 7; y++)
+            if (map[x][y] == figure)
+                return { x: x, y: y }
+    return { x: -1, y: -1 }
 }
 
 function isCorrectMove(sx, sy, dx, dy) {
@@ -309,17 +338,24 @@ function clickBoxFrom(x, y) {
     showMap();
 }
 
+
+function moveFigure(sx, sy, dx, dy) {
+
+    fromFigure = map[sx][sy];
+    toFigure = map[dx][dy];
+    map[dx][dy] = fromFigure // записать координаты той фигуры которую мы предварительно сохранили в перменной
+    map[sx][sy] = " ";
+}
+
+function backFigure(sx, sy, dx, dy) {
+    map[sx][sy] = fromFigure;
+    map[dx][dy] = toFigure;
+}
+
 function clickBoxTo(toX, toY) {
 
-    fromFigure = map[moveFromX][moveFromY];
-    toFigure = map[toX, toY];
-
-    pawnFigure = promotePawn(fromFigure, toY);
-
-
-    map[toX][toY] = pawnFigure == " " ? fromFigure : pawnFigure // записать координаты той фигуры которую мы предварительно сохранили в перменной
-    map[moveFromX][moveFromY] = " ";
-
+    moveFigure(moveFromX, moveFromY, toX, toY);
+    promotePawn(fromFigure, toX, toY);
 
     checkPawnAttack(fromFigure, toX, toY);
 
@@ -328,11 +364,11 @@ function clickBoxTo(toX, toY) {
     showMap();
 }
 
-function promotePawn(fromFigure, toY) {
+function promotePawn(fromFigure, toX, toY) {
     if (!isPawn(fromFigure))
-        return " ";
+        return;
     if (!(toY == 7 || toY == 0))
-        return " ";
+        return;
 
     do {
         figure = prompt("Select figure to prompt: Q R B N", "Q");
@@ -343,10 +379,10 @@ function promotePawn(fromFigure, toY) {
         isKnight(figure))) {
 
         if (moveColor == "white")
-            fromFigure = figure.toUpperCase();
+            figure = figure.toUpperCase();
         else
-            fromFigure = figure.toLowerCase();
-        return fromFigure;
+            figure = figure.toLowerCase();
+        map[toX][toY] = figure;
     }
 }
 
