@@ -10,10 +10,10 @@ modalButton.addEventListener('click', function () {
 
 
 modal.addEventListener('click', function (e) {
-    if (e.target.classList.contains('playBtn')) {
+    if (e.target.classList.contains('playBtn'))
         modal.style.display = 'none';
-        startGame();
-    }
+    startGame();
+
 
 })
 
@@ -35,14 +35,14 @@ let toFigure;
 function initMap() {
     map = [
         //y0   y1  y2   y3   y4   y5    y6   y7
-        ["R", " ", " ", " ", " ", " ", " ", "r"],//x=0
-        ["N", " ", " ", " ", " ", " ", " ", "n"],//x=1
-        ["B", " ", " ", " ", " ", " ", " ", "b"],//x=2
-        ["Q", " ", " ", " ", " ", " ", " ", "q"],//x=3
-        ["K", " ", " ", " ", " ", " ", " ", "k"],//x=4
-        ["B", " ", " ", " ", " ", " ", " ", "b"],//x=5
-        ["N", " ", " ", " ", " ", " ", " ", "n"],//x=6
-        ["R", " ", " ", " ", " ", " ", " ", "r"] //x=7
+        ["R", "P", " ", " ", " ", " ", "p", "r"],//x=0
+        ["N", "P", " ", " ", " ", " ", "p", "n"],//x=1
+        ["B", "P", " ", " ", " ", " ", "p", "b"],//x=2
+        ["Q", "P", " ", " ", " ", " ", "p", "q"],//x=3
+        ["K", "P", " ", " ", " ", " ", "p", "k"],//x=4
+        ["B", "P", " ", " ", " ", " ", "p", "b"],//x=5
+        ["N", "P", " ", " ", " ", " ", "p", "n"],//x=6
+        ["R", "P", " ", " ", " ", " ", "p", "r"] //x=7
     ]
 }
 
@@ -60,29 +60,42 @@ function initInf() {
 };
 
 function canMove(sx, sy, dx, dy) {
-    if (!canMoveFrom(sx, sy)) {
+    if (!canMoveFrom(sx, sy))
         return false;
-    }
-    if (!canMoveTo(dx, dy)) {
+
+    if (!canMoveTo(dx, dy))
         return false;
-    }
-    if (!isCorrectMove(sx, sy, dx, dy)) {
+
+    if (!isCorrectMove(sx, sy, dx, dy))
         return false;
-    }
-    if (!isCheck(sx, sy, dx, dy)) {
+
+    if (!isCheck(sx, sy, dx, dy))
         return true;
-    }
+
     return false;
 }
 
 
 function isCheck(sx, sy, dx, dy) {
+
     moveFigure(sx, sy, dx, dy);
 
-    king = findFigure("K");
-    map[king.x][king.y] = "P";
+    king = findFigure(moveColor == "white" ? "K" : "k");
+
+    turnMove();
+
+
+    let canBeEaten = false;
+    for (let x = 0; x <= 7; x++)
+        for (let y = 0; y <= 7; y++)
+            if (getColor(x, y) == moveColor)
+                if (isCorrectMove(x, y, king.x, king.y))
+                    canBeEaten = true;
+
+    turnMove();
 
     backFigure(sx, sy, dx, dy);
+
 }
 
 
@@ -97,25 +110,24 @@ function findFigure(figure) {
 function isCorrectMove(sx, sy, dx, dy) {
     let figure = map[sx][sy];
 
-    if (isKing(figure)) {
+    if (isKing(figure))
         return isCorrectKingMove(sx, sy, dx, dy)
-    }
-    if (isQueen(figure)) {
+
+    if (isQueen(figure))
         return isCorrectQueenMove(sx, sy, dx, dy)
-    }
-    if (isBishop(figure)) {
+
+    if (isBishop(figure))
         return isCorrectBishopMove(sx, sy, dx, dy)
-    }
-    if (isKnight(figure)) {
+
+    if (isKnight(figure))
         return isCorrectKnightMove(sx, sy, dx, dy)
-    }
-    if (isRook(figure)) {
+
+    if (isRook(figure))
         return isCorrectRookMove(sx, sy, dx, dy)
-    }
-    if (isPawn(figure)) {
+
+    if (isPawn(figure))
         return isCorrectPawnMove(sx, sy, dx, dy)
-    }
-    return true;
+    return false;
 }
 
 function isKing(figure) { return figure.toUpperCase() == 'K' }
@@ -140,26 +152,25 @@ function isCorrectLineMove(sx, sy, dx, dy, figure) {
         sx += deltaX;
         sy += deltaY;
 
-        if (sx == dx && sy == dy) {
+        if (sx == dx && sy == dy)
             return true;
-        }
-    } while (isEmpty(sx, sy)) {
-        return false;
-    }
+    } while (isEmpty(sx, sy))
+    return false;
+
 }
 
 
 function isCorrectLineDelta(deltaX, deltaY, figure) {
 
-    if (isRook(figure)) {
+    if (isRook(figure))
         return isCorrectRookDelta(deltaX, deltaY);
-    }
-    if (isBishop(figure)) {
+
+    if (isBishop(figure))
         return isCorrectBishopDelta(deltaX, deltaY);
-    }
-    if (isQueen(figure)) {
+
+    if (isQueen(figure))
         return isCorrectQueenDelta(deltaX, deltaY);
-    }
+
     return false;
 }
 
@@ -205,9 +216,8 @@ function isCorrectRookMove(sx, sy, dx, dy) {
 }
 
 function isEmpty(x, y) {
-    if (!onMap(x, y)) {
+    if (!onMap(x, y))
         return false;
-    }
     return map[x][y] == " ";
 }
 
@@ -216,23 +226,23 @@ function onMap(x, y) {
 }
 
 function isCorrectPawnMove(sx, sy, dx, dy) {
-    if (sy < 1 || sy > 6) {
+    if (sy < 1 || sy > 6)
         return false
-    };
-    if (getColor(sx, sy) == 'white') {
+
+    if (getColor(sx, sy) == 'white')
         return isCorrectSignPawnMove(sx, sy, dx, dy, 1)
-    }
-    if (getColor(sx, sy) == 'black') {
+
+    if (getColor(sx, sy) == 'black')
         return isCorrectSignPawnMove(sx, sy, dx, dy, -1)
-    }
+
     return false;
 }
 
 
 function isCorrectSignPawnMove(sx, sy, dx, dy, sign) {
-    if (isPawnPassant(sx, sy, dx, dy, sign)) {
+    if (isPawnPassant(sx, sy, dx, dy, sign))
         return true;
-    }
+
     if (!isEmpty(dx, dy)) {  //Взятие?
         if (Math.abs(dx - sx) != 1) //шаг влево вправо 
             return false;
@@ -253,18 +263,18 @@ function isCorrectSignPawnMove(sx, sy, dx, dy, sign) {
 
 
 function isPawnPassant(sx, sy, dx, dy, sign) {
-    if (!(dx == pawnAttackX && dy == pawnAttackY)) {
+    if (!(dx == pawnAttackX && dy == pawnAttackY))
         return false;
-    }
-    if (sign == +1 && sy != 4) {
+
+    if (sign == +1 && sy != 4)
         return false;
-    }
-    if (sign == -1 && sy != 3) {
+
+    if (sign == -1 && sy != 3)
         return false;
-    }
-    if (dy - sy != sign) {
+
+    if (dy - sy != sign)
         return false;
-    }
+
     return (Math.abs(dx - sx) == 1)
 
 }
@@ -272,34 +282,25 @@ function isPawnPassant(sx, sy, dx, dy, sign) {
 
 function marksMoveFrom() {
     initInf();
-    for (let sx = 0; sx <= 7; sx++) {
-        for (let sy = 0; sy <= 7; sy++) {
-            for (let dx = 0; dx <= 7; dx++) {
-                for (let dy = 0; dy <= 7; dy++) {
-                    if (canMove(sx, sy, dx, dy)) {
+    for (let sx = 0; sx <= 7; sx++)
+        for (let sy = 0; sy <= 7; sy++)
+            for (let dx = 0; dx <= 7; dx++)
+                for (let dy = 0; dy <= 7; dy++)
+                    if (canMove(sx, sy, dx, dy))
                         inf[sx][sy] = 1;
-                    }
-                }
-            }
-        }
-    }
 }
 
 function markMoveTo() {
     initInf();
-    for (let x = 0; x <= 7; x++) {
-        for (let y = 0; y <= 7; y++) {
-            if (canMove(moveFromX, moveFromY, x, y)) {
+    for (let x = 0; x <= 7; x++)
+        for (let y = 0; y <= 7; y++)
+            if (canMove(moveFromX, moveFromY, x, y))
                 inf[x][y] = 2;
-            }
-        }
-    }
 }
 
 function canMoveFrom(x, y) {
-    if (!onMap(x, y)) {
+    if (!onMap(x, y))
         return false;
-    }
     return getColor(x, y) == moveColor;
 }
 
@@ -323,12 +324,10 @@ function figureToHtml(figure) {
 }
 
 function clickBox(x, y) {
-    if (inf[x][y] == '1') {
+    if (inf[x][y] == '1')
         clickBoxFrom(x, y);
-    }
-    if (inf[x][y] == '2') {
+    if (inf[x][y] == '2')
         clickBoxTo(x, y);
-    }
 }
 
 function clickBoxFrom(x, y) {
@@ -340,7 +339,6 @@ function clickBoxFrom(x, y) {
 
 
 function moveFigure(sx, sy, dx, dy) {
-
     fromFigure = map[sx][sy];
     toFigure = map[dx][dy];
     map[dx][dy] = fromFigure // записать координаты той фигуры которую мы предварительно сохранили в перменной
