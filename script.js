@@ -9,6 +9,7 @@ modalButton.addEventListener('click', function () {
     document.getElementsByTagName('canvas')[0].style.display = 'none';
     document.getElementsByTagName('body')[0].style.margin = '10% auto';
     document.getElementsByTagName('body')[0].style.backgroundImage = 'url(./galaktika_bg.jpg)';
+    document.getElementsByTagName('body')[0].style.backgroundPosition = 'center';
     startGame();
 })
 
