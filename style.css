@@ -8,9 +8,14 @@ body{
     overflow: hidden;   
 }
 
+canvas{
+    z-index:-1000;
+    position: fixed;
+}
+
 .modal{
     position: fixed;
-bottom: 35%;
+    bottom: 35%;
     min-width: 250px;
     min-height: 180px;
     display: flex;
@@ -37,7 +42,9 @@ bottom: 35%;
 
 
 #board{
-    position: relative;
+    position: fixed;
+    top: 20%;
+    opacity: 0.8;
 }
 
 

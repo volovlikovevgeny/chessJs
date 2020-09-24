@@ -1,26 +1,28 @@
 //26
 
-let modal = document.getElementsByClassName('modal')[0]
-let modalButton = document.getElementsByTagName('button')[0];
+// let modal = document.getElementsByClassName('modal')[0]
+// let modalButton = document.getElementsByTagName('button')[0];
 
 
-modalButton.addEventListener('click', function () {
-    modal.style.display = 'none';
-    document.getElementsByTagName('canvas')[0].style.display = 'none';
-    document.getElementsByTagName('body')[0].style.margin = '10% auto';
-    document.getElementsByTagName('body')[0].style.backgroundImage = 'url(./galaktika_bg.jpg)';
-    document.getElementsByTagName('body')[0].style.backgroundPosition = 'center';
-    startGame();
-})
+// modalButton.addEventListener('click', function () {
+//     modal.style.display = 'none';
+//     document.getElementsByTagName('canvas')[0].style.display = 'none';
+//     document.getElementsByTagName('body')[0].style.margin = '10% auto';
+//     document.getElementsByTagName('body')[0].style.backgroundImage = 'url(./galaktika_bg.jpg)';
+//     document.getElementsByTagName('body')[0].style.backgroundPosition = 'center';
+//     startGame();
+// })
 
 
-modal.addEventListener('click', function (e) {
-    if (e.target.classList.contains('playBtn'))
-        modal.style.display = 'none';
-    startGame();
+// modal.addEventListener('click', function (e) {
+//     if (e.target.classList.contains('playBtn'))
+//         modal.style.display = 'none';
+//     startGame();
 
 
-})
+// })
+
+// startGame()
 
 let map = Array();
 let inf = Array();
@@ -449,9 +451,7 @@ function startGame() {
     showMap();
 }
 
-
-
-
+startGame();
 
 
 (() => {
