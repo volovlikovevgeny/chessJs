@@ -4,29 +4,29 @@ body{
     display:flex;
     
     justify-content: center;
-    margin: 10% auto;
+    /* margin: 10% auto; */
     overflow: hidden;   
 }
 
 .modal{
     position: fixed;
-    top: 30%;
+bottom: 35%;
     min-width: 250px;
     min-height: 180px;
-    background-color: #000;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     border-radius: 10%;
-    color: #fff;
+    color: #000;
     outline: none;
+    width: 100%;
 }
 .modal>button{
     padding: 10px;
     font-size: 20px;
     border-radius: 10%;
-    color: blue;
+    color: 000;
     background-color: antiquewhite;
 }
 
